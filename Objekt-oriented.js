@@ -1,7 +1,14 @@
+
 // Import the readline-sync module
-
-
 const readlineSync = require('readline-sync');
+
+class Superheroes {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+        
+    }
+}
 
 class Iron_Man_Suit {
     constructor(name) {
@@ -17,27 +24,11 @@ function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-class Iron_Man {
+class Iron_Man extends Superheroes {
     constructor(name, age) {
-        this.name = name;
-        this.age = age;
-        this.suit = "";
-    }
-
-    getName = () => {
-        return this.name;
-    }
-
-    getAge = () => {
-        return this.age;
-    }
-
-    setSuit = () => {
-        return this.suit;
-    }
-
-    getArmor = () => {
-        const suits = [
+        super(name, age, "Iron man");
+        this.unlockedSuits = [];
+        this.allSuits = [
             { name: "Mark L (50)", year: "2017-2018"},
             { name: "Mark LXXXV (85)", year: "2018-2023"},
             { name: "Mark XLIV (44)", year: "2014-2015"},
@@ -48,14 +39,45 @@ class Iron_Man {
             { name: "Mark IV (4)", year: "2008-2010"},
             { name: "Mark VI (6)", year: "2010"},
         ];
-        const x = randomIntFromInterval(0, suits.length - 1);
-        console.log("CONGRATULATIONS, YOU GOT THE", suits[x].name, "WHICH WAS USED / MADE IN", suits[x].year);
+        //this.successChance = 70 
+    }
+
+    getName = () => {
+        return this.name;
+    }
+
+    getAge = () => {
+        return this.age;
+    }
+
+    getArmor = () => {
+        if (this.unlockedSuits.length >= this.allSuits.length) {
+            console.log("You've unlocked all the suits! Congratulations!");
+            return; // Stop further rolling if all suits are unlocked
+        }
+
+        let suit;
+        do {
+            const x = randomIntFromInterval(0, this.allSuits.length - 1);
+            suit = this.allSuits[x];
+        } while (this.unlockedSuits.includes(suit.name)); // Ensure the suit isn't already unlocked
+
+        console.log("CONGRATULATIONS, YOU GOT THE", suit.name, "WHICH WAS USED / MADE IN", suit.year);
+        this.unlockedSuits.push(suit.name);
+    }
+
+    showIndex = () => {
+        const totalSuits = this.allSuits.length;
+        const unlockedCount = this.unlockedSuits.length;
+        const missingCount = totalSuits - unlockedCount;
+        
+        console.log(`You have unlocked ${unlockedCount} out of ${totalSuits} suits.`);
+        console.log(`You are missing ${missingCount} suits.`);
     }
 }
 
 // Create an instance of Iron_Man
 const ironman = new Iron_Man("Tony Stark", 8);
-
 
 let validResponse = false;
 let normalizedAnswer;
@@ -65,7 +87,7 @@ while (!validResponse) {
     normalizedAnswer = answer.toLowerCase();
 
     if (normalizedAnswer === "hell yeah") {
-        console.log("Hope you get one you like!")
+        console.log("Hope you get one you like!");
         ironman.getArmor();
         validResponse = true; 
     } else if (normalizedAnswer === "no") {
@@ -76,24 +98,24 @@ while (!validResponse) {
     }
 }
 
-
 // Loop to keep rolling until the user says "no"
 let continueRolling = true;
 
 while (continueRolling && normalizedAnswer === "hell yeah") {
-    const answer1 = readlineSync.question("Do you want to roll for another suit? 99% of gamblers quit before they hit big... (yes or no) ");
+    const answer1 = readlineSync.question("Do you want to roll for another suit, or check your index? (roll/index/no) ");
 
     // Normalize the answer to lower case
     const normalizedAnswer1 = answer1.toLowerCase();
 
-    if (normalizedAnswer1 === "yes") {
-        console.log("Great! Glad to hear that.");
+    if (normalizedAnswer1 === "roll") {
+        console.log("Great! Attaboy!")
         ironman.getArmor();
+    } else if (normalizedAnswer1 === "index") {
+        ironman.showIndex();
     } else if (normalizedAnswer1 === "no") {
         console.log("What if you hit big??? Fine, goodbye... exiting...");
         continueRolling = false; // End the loop and exit
     } else {
-        console.log("Please answer with 'yes' or 'no'.");
+        console.log("Please answer with 'roll', 'index', or 'no'.");
     }
 }
-

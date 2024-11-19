@@ -1,7 +1,7 @@
-
 // Import the readline-sync module
 const readlineSync = require('readline-sync');
 
+// parent class
 class Superheroes {
     constructor(name, age) {
         this.name = name;
@@ -19,11 +19,11 @@ class Iron_Man_Suit {
         return this.name;
     }
 }
-
+// Generates a random integer within a specific range, brings the randomdomness into the project
 function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
+// Child class that inherits from Superheroes
 class Iron_Man extends Superheroes {
     constructor(name, age) {
         super(name, age, "Iron man");
@@ -39,13 +39,13 @@ class Iron_Man extends Superheroes {
             { name: "Mark IV (4)", year: "2008-2010"},
             { name: "Mark VI (6)", year: "2010"},
         ];
-        //this.successChance = 70 
+        
     }
-
+// gives you the name of the suit
     getName = () => {
         return this.name;
     }
-
+// gives you the age of the suit
     getAge = () => {
         return this.age;
     }
@@ -65,7 +65,7 @@ class Iron_Man extends Superheroes {
         console.log("CONGRATULATIONS, YOU GOT THE", suit.name, "WHICH WAS USED / MADE IN", suit.year);
         this.unlockedSuits.push(suit.name);
     }
-
+// while in the index, it tells you how many suits you have unlocked and how many are missing. 
     showIndex = () => {
         const totalSuits = this.allSuits.length;
         const unlockedCount = this.unlockedSuits.length;
@@ -79,9 +79,11 @@ class Iron_Man extends Superheroes {
 // Create an instance of Iron_Man
 const ironman = new Iron_Man("Tony Stark", 8);
 
+// Used as a flag to control the while loop under that handles the user inputs
 let validResponse = false;
 let normalizedAnswer;
 
+// while loop that asks you the same question until you enter with a correct input
 while (!validResponse) {
     const answer = readlineSync.question("Welcome! Would you like to gamble for some Iron Man suits? (HELL YEAH or no) ");
     normalizedAnswer = answer.toLowerCase();
@@ -100,7 +102,7 @@ while (!validResponse) {
 
 // Loop to keep rolling until the user says "no"
 let continueRolling = true;
-
+            // Gives the user options for what the want to do
 while (continueRolling && normalizedAnswer === "hell yeah") {
     const answer1 = readlineSync.question("Do you want to roll for another suit, or check your index? (roll/index/no) ");
 
@@ -110,12 +112,12 @@ while (continueRolling && normalizedAnswer === "hell yeah") {
     if (normalizedAnswer1 === "roll") {
         console.log("Great! Attaboy!")
         ironman.getArmor();
-    } else if (normalizedAnswer1 === "index") {
+    } else if (normalizedAnswer1 === "index") { // Takes you to the index
         ironman.showIndex();
     } else if (normalizedAnswer1 === "no") {
         console.log("What if you hit big??? Fine, goodbye... exiting...");
         continueRolling = false; // End the loop and exit
     } else {
-        console.log("Please answer with 'roll', 'index', or 'no'.");
+        console.log("Please answer with 'roll', 'index', or 'no'."); // Checks that the input is correkt
     }
 }
